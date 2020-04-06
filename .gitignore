@@ -1,4 +1,9 @@
 __pycache__/
 .vs/
 training_data/
-messages/
+website_env/
+
+*.txt
+*.mp3
+*.json
+*.sqlite3

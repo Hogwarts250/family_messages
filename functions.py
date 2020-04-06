@@ -7,41 +7,53 @@ import time
 from stat import ST_MTIME
 import json
 
-def text_to_speech(settings):
-    modified = False
-    date_modified, messages = [], []
+class textToSpeech(threading.Thread):
+    def __init__(self, settings):
+        super().__init__()
 
-    for text in os.listdir("messages"):
-        if ".txt" in text:
-            metadata = os.stat("messages/" + text)
-            date_modified.append(metadata[ST_MTIME])
+        self.settings = settings
+        self._stop_event = threading.Event()
 
-            with open("messages/" + text) as f:
-                messages.append(f.read())
+    def run(self):
+        while not self._stop_event.isSet():
+            modified = False
+            date_modified, messages = [], []
 
-    try:
-        with open("messages/metadata.json", "r") as f:
-            json_data = json.load(f)
+            for text in os.listdir("messages"):
+                if ".txt" in text:
+                    metadata = os.stat("messages/" + text)
+                    date_modified.append(metadata[ST_MTIME])
 
-    except FileNotFoundError:
-        with open("messages/metadata.json", "w") as f:
-            json.dump(date_modified, f)
+                    with open("messages/" + text) as f:
+                        messages.append(f.read())
 
-        for i, message in enumerate(messages):
-            speech_file = gTTS(text=message, lang=settings.LANGUAGE)
-            speech_file.save("messages/" + settings.LABEL_TEXT[i] + ".mp3")
+            try:
+                with open(self.settings.METADATA_FILE, "r") as f:
+                    json_data = json.load(f)
 
-    else:
-        for i, data in enumerate(zip(date_modified, json_data)):
-            if data[0] != data[1]:
-                speech_file = gTTS(text=messages[i], lang=settings.LANGUAGE)
-                speech_file.save("messages/" + settings.LABEL_TEXT[i] + ".mp3")
+            except FileNotFoundError:
+                with open(self.settings.METADATA_FILE, "w") as f:
+                    json.dump(date_modified, f)
 
-                modified = True
+                for i, message in enumerate(messages):
+                    speech_file = gTTS(text=message, lang=settings.LANGUAGE)
+                    speech_file.save("messages/" + settings.LABEL_TEXT[i] + ".mp3")
 
-    if modified:
-        with open("messages/metadata.json", "w") as f:
-            json.dump(date_modified, f)
+            else:
+                for i, data in enumerate(zip(date_modified, json_data)):
+                    if data[0] != data[1]:
+                        speech_file = gTTS(text=messages[i], lang=settings.LANGUAGE)
+                        speech_file.save("messages/" + settings.LABEL_TEXT[i] + ".mp3")
+
+                        modified = True
+
+            if modified:
+                with open(self.settings.METADATA_FILE, "w") as f:
+                    json.dump(date_modified, f)
+    
+    def join(self):
+        self._stop_event.set()
+        threading.Thread.join(self, None)
 
 class playMessage(threading.Thread):
     def __init__(self, label, settings):
@@ -58,8 +70,7 @@ class playMessage(threading.Thread):
 
         self.settings.IS_SPEAKING = False
 
-def detect_face(image, settings):
-    net = cv2.dnn.readNetFromTensorflow(settings.MODEL_FILE, settings.CONFIG_FILE)
+def detect_face(image, net, settings):
     blob = cv2.dnn.blobFromImage(image, settings.SCALE_FACTOR, settings.RESIZED_FRAME, [104, 117, 123], swapRB=True)
 
     net.setInput(blob)
