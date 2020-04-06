@@ -1,0 +1,66 @@
+{% load bootstrap4 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript jquery="full" %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Family Messages</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <a class="navbar-brand my-1 my-sm-0" href="{% url 'family_messages:home' %}">
+        Home
+      </a>
+
+      <div class="mr-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      <div class="d-sm-none">
+        {% if user.is_authenticated %}
+        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:logout' %}" role="button">Logout</a>
+        {% else %}
+        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:login' %}" role="button">Login</a>
+        {% endif %}
+      </div>
+      
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <div class="navbar-nav mr-auto my-1 mysm-0">
+          {% for username in usernames %}
+          <a class="nav-item nav-link" href="#">{{ username }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <div class="d-none d-sm-block">
+        {% if user.is_authenticated %}
+        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:logout' %}" role="button">Logout</a>
+        {% else %}
+        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:login' %}" role="button">Login</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <main>
+      <div class="container my-4">
+        {% block content %}{% endblock content %}
+      </div>
+    </main>
+
+    <footer class="footer fixed-bottom py-3 bg-dark">
+      <div class="text-left col-sm-12">
+        <a class="text-muted px-2" href="https://github.com/Hogwarts250/facial_recognition">Github</a>
+        <a class="text-muted px-2" href="https://felixzhangblog.herokuapp.com">Blog</a>
+      </div>
+    </footer>
+
+  </body>
+</html>

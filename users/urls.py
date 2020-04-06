@@ -1,4 +1,4 @@
-"""website URL Configuration
+"""users URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -13,11 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
+from . import views
+
+app_name = "users"
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('family_messages.urls', namespace='family_messages')),
-    path('users/', include('users.urls', namespace='users'))
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.logout_view, name='logout'),
 ]

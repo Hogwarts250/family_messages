@@ -22,10 +22,11 @@ while True:
     rect_coords = detect_face(frame, net, settings)
 
     if rect_coords:
+        x1, y1, x2, y2 = rect_coords
         label = recognize_face(frame, rect_coords, face_recognizer, settings)
 
-        cv2.rectangle(frame, (rect_coords[0], rect_coords[1]), (rect_coords[2], rect_coords[3]), settings.RECTANGLE_COLOUR, 2)
-        cv2.putText(frame, label.title(), (rect_coords[0], rect_coords[3]+27), cv2.FONT_HERSHEY_SIMPLEX, 1, settings.RECTANGLE_COLOUR, 2)
+        cv2.rectangle(frame, (x1, y1), (x2, y2), settings.RECTANGLE_COLOUR, 2)
+        cv2.putText(frame, label.title(), (x1, x2 + 27), cv2.FONT_HERSHEY_SIMPLEX, 1, settings.RECTANGLE_COLOUR, 2)
 
         if not settings.IS_SPEAKING:
             play_message = playMessage(label, settings)
