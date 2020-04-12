@@ -128,3 +128,11 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/users/login/'
 
 django_heroku.settings(locals())
+
+cwd = os.getcwd()
+if cwd == '/app' or cwd[:4] == '/tmp':
+    DEBUG = False
+
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
