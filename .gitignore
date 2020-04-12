@@ -1,9 +1,6 @@
 __pycache__/
-.vs/
-training_data/
+.vscode/
 website_env/
 
-*.txt
-*.mp3
 *.json
 *.sqlite3

@@ -20,4 +20,6 @@ from . import views
 app_name = "family_messages"
 urlpatterns = [
     path('', views.home, name='home'),
+    path('message/<str:username>', views.view_message, name='view_message'),
+    path('edit/<str:username>', views.edit_message, name='edit')
 ]

@@ -1,0 +1,17 @@
+{% extends "family_messages/base.html" %}
+
+{% block content %}
+<div class="m-5">
+  <div class="d-flex flex-column mx-auto" style="max-width: 1000px;">
+    <div class="d-flex flex-row justify-content-between">
+      <h1 class="mb-0 text-left">{{ username }}</h1>
+
+      {% if user.username == username %}
+      <a href="{% url 'family_messages:edit' username %}" class="btn btn-outline-success align-self-center" role="button">Edit</a>
+      {% endif %}
+    </div>
+    
+    <p class="my-3">{{ message }}</p>
+  </div>
+</div>
+{% endblock content %}

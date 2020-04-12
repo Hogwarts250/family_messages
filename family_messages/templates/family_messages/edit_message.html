@@ -1,0 +1,22 @@
+{% extends "family_messages/base.html" %} {% load bootstrap4 %}
+
+{% block content %}
+<div class="justify-content-center m-5">
+  <div class="d-flex flex-column mx-auto" style="max-width: 1000px;">
+    <p class="h1 mr-auto my-auto">{{ username }}</p>
+
+    <form action="{% url 'family_messages:edit' username %}" method="POST" class="form-group">
+      {% csrf_token %}
+      <div class="my-3">
+        <textarea name="text" class="form-control" rows="12" placeholder="Text" required>{{ message }}</textarea>
+      </div>
+
+      <div class="my-3">
+        <button type="submit" class="btn btn-outline-success">Save</button>
+      </div>
+
+      <input type="hidden" name="next" value="{% url 'family_messages:home' %}"/>
+    </form>
+  </div>
+</div>
+{% endblock content %}

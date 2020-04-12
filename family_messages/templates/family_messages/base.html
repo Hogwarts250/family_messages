@@ -14,35 +14,40 @@
 
   <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-      <a class="navbar-brand my-1 my-sm-0" href="{% url 'family_messages:home' %}">
+      <a class="navbar-brand mx-2 my-1 my-sm-0" href="{% url 'family_messages:home' %}">
         Home
       </a>
 
       <div class="mr-auto">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler">
+        <button class="navbar-toggler mx-2" type="button" data-toggle="collapse" data-target="#navbarToggler">
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
 
-      <div class="d-sm-none">
+      <div class="d-sm-none mx-2">
         {% if user.is_authenticated %}
-        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:logout' %}" role="button">Logout</a>
+        <form class="form-inline my-1 my-sm-0">
+          <a class="btn btn-outline-success" href="{% url 'users:logout' %}" role="button">Logout</a>
+        </form>
         {% else %}
-        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:login' %}" role="button">Login</a>
+        <a class="btn btn-outline-success align-self-end my-1 my-sm-0" href="{% url 'users:login' %}" role="button">Login</a>
         {% endif %}
       </div>
       
       <div class="collapse navbar-collapse" id="navbarToggler">
-        <div class="navbar-nav mr-auto my-1 mysm-0">
+        <div class="navbar-nav mr-auto mx-3 my-1 my-sm-0">
           {% for username in usernames %}
-          <a class="nav-item nav-link" href="#">{{ username }}</a>
+          <a class="nav-item nav-link" href="{% url 'family_messages:view_message' username %}">{{ username }}</a>
           {% endfor %}
         </div>
       </div>
       
       <div class="d-none d-sm-block">
         {% if user.is_authenticated %}
-        <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:logout' %}" role="button">Logout</a>
+        <form class="form-inline my-1 my-sm-0">
+          <p class="text-white my-auto mx-4">Hello {{ user.username }}</p>
+          <a class="btn btn-outline-success" href="{% url 'users:logout' %}" role="button">Logout</a>
+        </form>
         {% else %}
         <a class="btn btn-outline-success my-1 my-sm-0" href="{% url 'users:login' %}" role="button">Login</a>
         {% endif %}
@@ -50,14 +55,14 @@
     </nav>
 
     <main>
-      <div class="container my-4">
+      <div class="container-fluid">
         {% block content %}{% endblock content %}
       </div>
     </main>
 
     <footer class="footer fixed-bottom py-3 bg-dark">
-      <div class="text-left col-sm-12">
-        <a class="text-muted px-2" href="https://github.com/Hogwarts250/facial_recognition">Github</a>
+      <div class="text-left col-sm-12 mx-2">
+        <a class="text-muted px-2" href="https://github.com/Hogwarts250/family_messages">Github</a>
         <a class="text-muted px-2" href="https://felixzhangblog.herokuapp.com">Blog</a>
       </div>
     </footer>
