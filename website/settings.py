@@ -129,8 +129,7 @@ LOGIN_URL = '/users/login/'
 
 django_heroku.settings(locals())
 
-cwd = os.getcwd()
-if cwd == '/app' or cwd[:4] == '/tmp':
+if 'HEROKU' in os.environ:
     DEBUG = False
 
     SECURE_SSL_REDIRECT = True

@@ -9,7 +9,7 @@ from .forms import MessageForm
 
 def home(request):
     users = User.objects.all()
-    usernames = [username for username in users.values_list("username", flat=True) if username != "admin"]
+    usernames = [user.username for user in users if not user.is_superuser]
 
     context = {"usernames": usernames}
 
@@ -18,7 +18,7 @@ def home(request):
 @login_required
 def view_message(request, username):
     users = User.objects.all()
-    usernames = [username for username in users.values_list("username", flat=True) if username != "admin"]
+    usernames = [user.username for user in users if not user.is_superuser]
 
     user = users.get(username__exact=username)
     message = Message.objects.all().get(owner__exact=user)
@@ -30,7 +30,7 @@ def view_message(request, username):
 @login_required
 def edit_message(request, username):
     users = User.objects.all()
-    usernames = [username for username in users.values_list("username", flat=True) if username != "admin"]
+    usernames = [user.username for user in users if not user.is_superuser]
 
     user = users.get(username__exact=username)
     message = Message.objects.all().get(owner__exact=user)

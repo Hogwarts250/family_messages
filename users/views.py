@@ -19,7 +19,7 @@ def login_view(request):
                 return HttpResponseRedirect(reverse("family_messages:home"))
 
     users = User.objects.all()
-    usernames = [username for username in users.values_list("username", flat=True) if username != "admin"]
+    usernames = [user.username for user in users if not user.is_superuser]
     
     form = AuthenticationForm()
 
